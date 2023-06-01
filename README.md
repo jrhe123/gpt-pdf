@@ -4,6 +4,9 @@
 
 ![Jun-01-2023 19-22-30](https://github.com/jrhe123/gpt-pdf/assets/17329299/0a39f6e8-7037-4f80-bdd7-03ca6dae66dd)
 
+![Ask_Book_Questions_Workflow](https://github.com/jrhe123/gpt-pdf/assets/17329299/8d095578-4d0d-4c84-b989-78eade98281e)
+
+
 #### reference:
 
 - https://www.youtube.com/watch?v=wUAUdEw5oxM&list=WL&index=8&t=1734s
