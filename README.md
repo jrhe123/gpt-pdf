@@ -14,6 +14,9 @@
 - https://bennycheung.github.io/ask-a-book-questions-with-langchain-openai
 - https://python.langchain.com/en/latest/use_cases/question_answering.html
 
+#### llm integrations
+- https://python.langchain.com/en/latest/modules/models/llms/integrations.html
+
 #### python env:
 
 - python3 -m venv env
