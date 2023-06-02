@@ -7,6 +7,10 @@
 - https://bennycheung.github.io/ask-a-book-questions-with-langchain-openai
 - https://python.langchain.com/en/latest/use_cases/question_answering.html
 
+#### pinecone
+
+- https://docs.pinecone.io/docs/quickstart
+
 #### python env:
 
 - python3 -m venv env

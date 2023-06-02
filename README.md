@@ -6,7 +6,6 @@
 
 ![Ask_Book_Questions_Workflow](https://github.com/jrhe123/gpt-pdf/assets/17329299/8d095578-4d0d-4c84-b989-78eade98281e)
 
-
 #### reference:
 
 - https://www.youtube.com/watch?v=wUAUdEw5oxM&list=WL&index=8&t=1734s
@@ -15,7 +14,13 @@
 - https://python.langchain.com/en/latest/use_cases/question_answering.html
 
 #### llm integrations
+
 - https://python.langchain.com/en/latest/modules/models/llms/integrations.html
+
+#### pinecone (vector database)
+
+- https://docs.pinecone.io/docs/quickstart
+- https://github.com/sudarshan-koirala/youtube-stuffs/blob/main/langchain/Chat_with_Any_Documents_Own_ChatGPT_with_LangChain.ipynb
 
 #### python env:
 
