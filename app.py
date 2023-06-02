@@ -1,6 +1,8 @@
 from dotenv import load_dotenv
 import streamlit as st
 from PyPDF2 import PdfReader
+import os
+import pickle
 # langchain
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
@@ -33,20 +35,30 @@ def main():
         )
         chunks = text_splitter.split_text(text)
 
-        # create embeddings
-        embeddings = OpenAIEmbeddings()
-        # FAISS (Facebook AI Similarity Search)
-        kownledge_base = FAISS.from_texts(chunks, embeddings)
+        # store the vector as cached file (saved as pickle file)
+        store_name = pdf.name[:-4]
+        if os.path.exists(f"{store_name}.pk1"):
+            with open(f"{store_name}.pk1", "rb") as f:
+                kownledge_base = pickle.load(f)
+            print("loaded from cached")
+        else:
+          # create embeddings
+          embeddings = OpenAIEmbeddings()
+          # FAISS (Facebook AI Similarity Search)
+          kownledge_base = FAISS.from_texts(chunks, embeddings)
+          # save it as cached
+          with open(f"{store_name}.pk1", "wb") as f:
+              pickle.dump(kownledge_base, f)
 
         # ask question
         user_question = st.text_input("Ask your question")
         if user_question:
             # find the chunks with similarity (semantic search)
-            docs = kownledge_base.similarity_search(user_question)
+            docs = kownledge_base.similarity_search(query=user_question, k=3)
             # llm integrations:
             # https://python.langchain.com/en/latest/modules/models/llms/integrations.html
-            llm = OpenAI()
-            chain = load_qa_chain(llm, chain_type="stuff")
+            llm = OpenAI(temperature=0)
+            chain = load_qa_chain(llm=llm, chain_type="stuff")
             with get_openai_callback() as cb:
               response = chain.run(input_documents=docs, question=user_question)
               # check the price of openAI usage
