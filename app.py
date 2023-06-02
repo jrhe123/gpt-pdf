@@ -10,7 +10,9 @@ from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
+from langchain.chains import ConversationalRetrievalChain
 
+chat_history = []
 def main():
     load_dotenv()
 
@@ -44,7 +46,7 @@ def main():
         else:
           # create embeddings
           embeddings = OpenAIEmbeddings()
-          # FAISS (Facebook AI Similarity Search)
+          # FAISS (Facebook AI Similarity Search) vector
           kownledge_base = FAISS.from_texts(chunks, embeddings)
           # save it as cached
           with open(f"{store_name}.pk1", "wb") as f:
@@ -58,13 +60,22 @@ def main():
             # llm integrations:
             # https://python.langchain.com/en/latest/modules/models/llms/integrations.html
             llm = OpenAI(temperature=0)
-            chain = load_qa_chain(llm=llm, chain_type="stuff")
+            # chain = load_qa_chain(llm=llm, chain_type="stuff")
+
+            retriever = kownledge_base.as_retriever(search_type="similarity", search_kwargs={"k":2})
             with get_openai_callback() as cb:
-              response = chain.run(input_documents=docs, question=user_question)
-              # check the price of openAI usage
-              print(cb)
-            # show the answer
-            st.write(response)
+                qa = ConversationalRetrievalChain.from_llm(llm, retriever)
+                result = qa({"question": user_question, "chat_history": chat_history})
+                chat_history.append((user_question, result["answer"]))
+                print(cb)
+            st.write(result["answer"])
+
+            # with get_openai_callback() as cb:
+            #   response = chain.run(input_documents=docs, question=user_question)
+            #   # check the price of openAI usage
+            #   print(cb)
+            # # show the answer
+            # st.write(response)
 
 
 if __name__ == "__main__":
