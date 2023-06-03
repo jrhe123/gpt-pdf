@@ -6,6 +6,9 @@
 
 ![Ask_Book_Questions_Workflow](https://github.com/jrhe123/gpt-pdf/assets/17329299/8d095578-4d0d-4c84-b989-78eade98281e)
 
+![pinecone-create-index](https://github.com/jrhe123/gpt-pdf/assets/17329299/73403dd3-341b-41e6-a7dd-4b7519772ec0)
+
+
 #### reference:
 
 - https://www.youtube.com/watch?v=wUAUdEw5oxM&list=WL&index=8&t=1734s
