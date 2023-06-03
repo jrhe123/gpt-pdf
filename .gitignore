@@ -160,6 +160,7 @@ cython_debug/
 #.idea/
 
 # IDE - VSCode
+.DS_Store
 .vscode/
 .vscode/*
 !.vscode/settings.json
@@ -168,3 +169,5 @@ cython_debug/
 !.vscode/extensions.json
 
 /temp/*
+# hugging face pk1 temp files
+hf-*.pk1

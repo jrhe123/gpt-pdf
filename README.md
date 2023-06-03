@@ -8,7 +8,6 @@
 
 ![pinecone-create-index](https://github.com/jrhe123/gpt-pdf/assets/17329299/73403dd3-341b-41e6-a7dd-4b7519772ec0)
 
-
 #### reference:
 
 - https://www.youtube.com/watch?v=wUAUdEw5oxM&list=WL&index=8&t=1734s
@@ -43,3 +42,8 @@
 
 - https://streamlit.io/components
 - cmd: streamlit run app.py
+
+#### Javscript version
+
+- reference: https://github.com/developersdigest/Get-Started-With-Langchain-and-Pinecone-in-Node.js/blob/main/3-queryPineconeAndQueryGPT.js
+- https://www.youtube.com/watch?v=dD_xNmePdd0&t=724s

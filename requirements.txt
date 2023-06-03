@@ -8,3 +8,10 @@ faiss-cpu
 pinecone-client
 temp
 pypdf
+# HuggingFaceInstruct
+sentence-transformers
+transformers
+InstructorEmbedding
+torch
+torchvision
+torchaudio
