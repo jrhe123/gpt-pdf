@@ -16,17 +16,37 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.callbacks import get_openai_callback
 from langchain.callbacks.base import BaseCallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+# InstructorEmbedding
+from langchain import HuggingFaceHub
+from langchain.embeddings import HuggingFaceInstructEmbeddings
 
 load_dotenv()
+ENABLE_PINECONE = False
+ENABLE_HUGGING_FACE = False  # comparison between openAI & hugging face
 # initialize pinecone
 # reference: https://github.com/sudarshan-koirala/youtube-stuffs/blob/main/langchain/Chat_with_Any_Documents_Own_ChatGPT_with_LangChain.ipynb
-ENABLE_PINECONE = False
 PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
 PINECONE_ENV = os.environ.get("PINECONE_ENV")
 pinecone.init(
     api_key=PINECONE_API_KEY,  # find at app.pinecone.io
     environment=PINECONE_ENV  # next to api key in console
 )
+
+
+def store_embeddings(docs, embeddings, store_name):
+    # FAISS (Facebook AI Similarity Search)
+    vectorStore = FAISS.from_texts(docs, embeddings)
+    # save it as cached
+    with open(f"{store_name}.pk1", "wb") as f:
+        pickle.dump(vectorStore, f)
+    return vectorStore
+
+
+def load_embeddings(store_name):
+    with open(f"{store_name}.pk1", "rb") as f:
+        print("loaded from cached")
+        vectorStore = pickle.load(f)
+    return vectorStore
 
 
 def wait_on_index(index: str):
@@ -92,20 +112,27 @@ def main():
                     length_function=len,
                 )
                 chunks = text_splitter.split_text(text)
-                embeddings = OpenAIEmbeddings()
+
+                # select embedding
+                if ENABLE_HUGGING_FACE:
+                    # instructor
+                    embeddings = HuggingFaceInstructEmbeddings(
+                        model_name="hkunlp/instructor-xl")
+                else:
+                    embeddings = OpenAIEmbeddings()
 
                 # store the vector as cached file (saved as pickle file)
-                store_name = pdf.name[:-4]
-                if os.path.exists(f"{store_name}.pk1"):
-                    with open(f"{store_name}.pk1", "rb") as f:
-                        kownledge_base = pickle.load(f)
-                    print("loaded from cached")
+                if ENABLE_HUGGING_FACE:
+                    store_name = f"hf-{pdf.name[:-4]}"
                 else:
-                    # FAISS (Facebook AI Similarity Search)
-                    kownledge_base = FAISS.from_texts(chunks, embeddings)
-                    # save it as cached
-                    with open(f"{store_name}.pk1", "wb") as f:
-                        pickle.dump(kownledge_base, f)
+                    store_name = pdf.name[:-4]
+
+                # check if it exists
+                if os.path.exists(f"{store_name}.pk1"):
+                    kownledge_base = load_embeddings(store_name)
+                else:
+                    kownledge_base = store_embeddings(
+                        chunks, embeddings, store_name)
 
             # ask question
             user_question = st.text_input("Ask your question")
@@ -113,17 +140,27 @@ def main():
                 # find the chunks with similarity (semantic search)
                 docs = kownledge_base.similarity_search(
                     query=user_question, k=3)
+
                 # llm integrations:
                 # https://python.langchain.com/en/latest/modules/models/llms/integrations.html
-                llm = OpenAI(temperature=0)
-                chain = load_qa_chain(llm=llm, chain_type="stuff")
-                with get_openai_callback() as cb:
+                if ENABLE_HUGGING_FACE:
+                    llm = HuggingFaceHub(repo_id="declare-lab/flan-alpaca-large",
+                                         model_kwargs={"temperature": 0, "max_length": 512})
+                    chain = load_qa_chain(llm=llm, chain_type="stuff")
                     response = chain.run(input_documents=docs,
                                          question=user_question)
-                    # check the price of openAI usage
-                    print(cb)
-                # show the answer
-                st.write(response)
+                    # show the answer
+                    st.write(response)
+                else:
+                    llm = OpenAI(temperature=0)
+                    chain = load_qa_chain(llm=llm, chain_type="stuff")
+                    with get_openai_callback() as cb:
+                        response = chain.run(input_documents=docs,
+                                             question=user_question)
+                        # check the price of openAI usage
+                        print(cb)
+                    # show the answer
+                    st.write(response)
 
     except Exception as e:
         """
