@@ -22,6 +22,10 @@
 - https://docs.pinecone.io/docs/quickstart
 - https://github.com/sudarshan-koirala/youtube-stuffs/blob/main/langchain/Chat_with_Any_Documents_Own_ChatGPT_with_LangChain.ipynb
 
+#### openAI stream output
+
+- https://python.langchain.com/en/latest/modules/models/llms/examples/streaming_llm.html
+
 #### python env:
 
 - python3 -m venv env
