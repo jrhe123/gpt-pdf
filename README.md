@@ -8,6 +8,9 @@
 
 ![pinecone-create-index](https://github.com/jrhe123/gpt-pdf/assets/17329299/73403dd3-341b-41e6-a7dd-4b7519772ec0)
 
+![hugging-face](https://github.com/jrhe123/gpt-pdf/assets/17329299/0a1ce8f1-c0dc-4430-9a37-b8d2bc39cd34)
+
+
 #### reference:
 
 - https://www.youtube.com/watch?v=wUAUdEw5oxM&list=WL&index=8&t=1734s
