@@ -5,3 +5,6 @@ streamlit
 openai
 tiktoken
 faiss-cpu
+pinecone-client
+temp
+pypdf
